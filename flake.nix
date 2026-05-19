@@ -1,42 +1,38 @@
 {
-  description = "Ambiente di sviluppo isolato per presentazioni Beamer LaTeX e Video TTS";
+  description = "Ambiente di Sviluppo Isolato OGA VGEN con Just Task Runner";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs }:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-      
-      # Distribuzione TeX Live solida e onnicomprensiva
-      texEnvironment = pkgs.texlive.combine {
-        inherit (pkgs.texlive) 
-          scheme-small
-          collection-latexextra # Include automaticamente Metropolis, Owl e tutti i macro package extra
-          booktabs         
-          microtype        
-          pgfplots         
-          etoolbox
-          translator;
-      };
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+        pythonEnv = pkgs.python313.withPackages (ps: [
+          ps.manim
+          ps.edge-tts
+          ps.numpy
+          ps.ruff
+          ps.mypy
+	  ps.mutagen
+        ]);
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          buildInputs = [
+            pythonEnv
+            pkgs.ffmpeg
+            pkgs.just # Aggiunto come standard di automazione del team
+	    pkgs.yt-dlp
+          ];
 
-      # Ambiente Python isolato con gTTS incluso
-      pythonEnv = pkgs.python3.withPackages (ps: with ps; [
-        edge-tts
-	rich
-      ]);
-    in {
-      devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          texEnvironment   
-          pythonEnv        
-          gnumake          
-          pdfpc            
-          poppler-utils    
-          ffmpeg           
-        ];
-      };
-    };
+          shellHook = ''
+            export PYTHONDONTWRITEBYTECODE=1
+            export PYTHONUNBUFFERED=1
+            echo "Digita 'just' per formattare, controllare e compilare il video"
+          '';
+        };
+      });
 }

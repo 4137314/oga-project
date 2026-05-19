@@ -1,0 +1,17 @@
+# Configurazione globale di Ruff
+line-length = 120
+
+[tool.ruff.lint]
+# Regole predefinite attive (Errori, Linter di base, Warning)
+select = ["E", "F", "W"]
+
+# Ignora i falsi positivi strutturali legati a Manim
+ignore = [
+    "F403", # "from manim import *" usato, impossibile rilevare nomi non definiti
+    "F405"  # "Scene/Text/etc." potrebbe essere non definito o derivato da star import
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Se in futuro vorrai essere più severo in altre cartelle (es. test o script di deployment), 
+# puoi decommentare la riga sotto per applicare i filtri solo ai file grafici:
+# "src/section/**/*" = ["F403", "F405"]

@@ -1,26 +1,48 @@
 # ==========================================
-# File di Build e Output del Progetto
+# Prodotti di Build e Output
 # ==========================================
-build/
-*.pdf
+/build/
+/dist/
+/output/
+/temp/
+/temp_audio/
+*.mp4
+*.srt
 
 # ==========================================
-# File Ausiliari Generati da pdfpc
+# Cache di Manim (Essenziale per la pulizia)
 # ==========================================
-*.pdfpc
+# Manim crea migliaia di file in media/
+/media/
+__pycache__/
+*.pyc
+*.pyo
 
 # ==========================================
-# File di Ambiente Locale (Nix & Direnv)
+# Ambiente di Sviluppo (Nix, Python, IDE)
 # ==========================================
+# Nix & Direnv
 .direnv/
 .envrc.cache
+.nix-profile/
 
-# ==========================================
-# File di Sistema e Cache degli Editor
-# ==========================================
+# Python Virtual Environments
+.venv/
+env/
+venv/
+
+# Editor & OS
 .DS_Store
-*~
 *.swp
 *.bak
 .vscode/
 .idea/
+.log
+*.log
+
+# ==========================================
+# File di Progetto Specifici
+# ==========================================
+# Se hai dei file di configurazione con segreti
+.env
+.secrets
