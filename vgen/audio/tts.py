@@ -29,8 +29,8 @@ async def _synthesize_single_track(idx, note_text, audio_durations, progress, ta
             communicate = edge_tts.Communicate(
                 text=clean_content,
                 voice='it-IT-DiegoNeural',
-                rate='+50%',
-                pitch='-10Hz'
+                rate='+20%',
+                pitch='-12Hz'
             )
             await communicate.save(audio_path)
             
